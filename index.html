@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Удосконалення техніки метання м'яча | Фізичне виховання</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #f7f9fc;
+    --card: #ffffff;
+    --primary: #1e6fd9;
+    --primary-dark: #1558b3;
+    --accent: #10b981;
+    --accent-2: #f59e0b;
+    --danger: #ef4444;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --shadow: 0 4px 20px rgba(30, 111, 217, 0.08);
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  header {
+    background: linear-gradient(135deg, #ffffff 0%, #eaf2fc 100%);
+    border-bottom: 3px solid var(--primary);
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  header h1 {
+    color: var(--primary-dark);
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+  }
+  header p { color: var(--muted); font-size: 1.05rem; }
+  .badge {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin: 10px 4px 0;
+  }
+  .badge.green { background: var(--accent); }
+  .badge.orange { background: var(--accent-2); }
+
+  nav {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  nav a {
+    color: var(--primary-dark);
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  nav a:hover { background: var(--primary); color: white; }
+
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 20px;
+  }
+  section {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 28px;
+    margin-bottom: 28px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+  section h2 {
+    color: var(--primary-dark);
+    font-size: 1.6rem;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  section h2::before {
+    content: '';
+    width: 8px; height: 28px;
+    background: var(--primary);
+    border-radius: 4px;
+  }
+  h3 { color: var(--primary-dark); margin: 16px 0 8px; }
+  p, li { margin-bottom: 8px; }
+  ul, ol { padding-left: 22px; }
+
+  /* Інфографіка фаз */
+  .phases {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .phase-card {
+    background: linear-gradient(135deg, #ffffff, #f0f6ff);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .phase-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary);
+    box-shadow: 0 8px 20px rgba(30,111,217,0.15);
+  }
+  .phase-card .num {
+    display: inline-block;
+    width: 36px; height: 36px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    line-height: 36px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .phase-card svg { width: 80px; height: 80px; margin: 8px 0; }
+  .phase-card h4 { color: var(--primary-dark); margin-bottom: 6px; }
+  .phase-card p { font-size: 0.9rem; color: var(--muted); }
+
+  /* Інфографіка м'язів */
+  .muscles-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: center;
+    margin-top: 20px;
+  }
+  @media (max-width: 700px) { .muscles-grid { grid-template-columns: 1fr; } }
+  .body-svg {
+    background: linear-gradient(135deg, #f0f6ff, #ffffff);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .body-svg svg { max-width: 260px; }
+  .muscle-list { list-style: none; padding: 0; }
+  .muscle-list li {
+    background: #f9fafb;
+    border-left: 4px solid var(--primary);
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .muscle-list li:hover {
+    background: #eaf2fc;
+    transform: translateX(5px);
+  }
+  .muscle-list strong { color: var(--primary-dark); }
+
+  /* Симулятор */
+  .simulator {
+    background: linear-gradient(135deg, #f0f6ff, #ffffff);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 16px;
+  }
+  .sim-canvas {
+    background: linear-gradient(to bottom, #e0f2fe 0%, #bae6fd 70%, #86efac 70%, #4ade80 100%);
+    border-radius: 10px;
+    width: 100%;
+    height: 280px;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid var(--border);
+  }
+  .ball {
+    position: absolute;
+    width: 22px; height: 22px;
+    background: radial-gradient(circle at 30% 30%, #fbbf24, #d97706);
+    border-radius: 50%;
+    bottom: 30%;
+    left: 10%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: all 0.05s linear;
+  }
+  .controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .control {
+    background: white;
+    padding: 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .control label {
+    display: block;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 6px;
+  }
+  .control input[type="range"] { width: 100%; }
+  .control .value {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    margin-left: 8px;
+  }
+  .throw-btn {
+    display: block;
+    width: 100%;
+    margin-top: 16px;
+    padding: 14px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .throw-btn:hover { background: var(--primary-dark); transform: translateY(-2px); }
+  .result {
+    margin-top: 12px;
+    padding: 12px;
+    background: #ecfdf5;
+    border-left: 4px solid var(--accent);
+    border-radius: 6px;
+    display: none;
+  }
+  .result.show { display: block; }
+
+  /* Гра */
+  .game-rules {
+    background: #fffbeb;
+    border-left: 4px solid var(--accent-2);
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin: 12px 0;
+  }
+  .quiz {
+    margin-top: 16px;
+  }
+  .question {
+    background: #f9fafb;
+    padding: 16px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+    border: 1px solid var(--border);
+  }
+  .question p { font-weight: 600; margin-bottom: 10px; }
+  .options { display: grid; gap: 8px; }
+  .option {
+    background: white;
+    padding: 10px 14px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .option:hover { border-color: var(--primary); background: #f0f6ff; }
+  .option.correct { background: #d1fae5; border-color: var(--accent); color: #065f46; }
+  .option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+  .score-box {
+    background: var(--primary);
+    color: white;
+    padding: 16px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 1.1rem;
+    margin-top: 16px;
+  }
+
+  /* Домашнє завдання */
+  .homework {
+    background: linear-gradient(135deg, #ecfdf5, #ffffff);
+    border: 2px dashed var(--accent);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .task {
+    background: white;
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border-left: 4px solid var(--accent);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .task input[type="checkbox"] {
+    width: 20px; height: 20px;
+    margin-top: 3px;
+    cursor: pointer;
+    accent-color: var(--accent);
+  }
+  .task.done { opacity: 0.6; text-decoration: line-through; }
+  .progress-bar {
+    background: var(--border);
+    border-radius: 10px;
+    height: 12px;
+    overflow: hidden;
+    margin-top: 16px;
+  }
+  .progress-fill {
+    background: linear-gradient(90deg, var(--accent), #34d399);
+    height: 100%;
+    width: 0%;
+    transition: width 0.4s;
+  }
+
+  footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🏐 Удосконалення техніки метання м'яча</h1>
+  <p>Спортивна гра • Фізичне виховання</p>
+  <div>
+    <span class="badge">Медичний коледж</span>
+    <span class="badge green">Інтерактивний урок</span>
+    <span class="badge orange">З інфографікою</span>
+  </div>
+</header>
+
+<nav>
+  <a href="#meta">🎯 Мета</a>
+  <a href="#phases">📊 Фази метання</a>
+  <a href="#anatomy">🫀 Анатомія</a>
+  <a href="#simulator">🎮 Симулятор</a>
+  <a href="#game">🏆 Спортивна гра</a>
+  <a href="#homework">📝 Домашнє завдання</a>
+  <a href="#quiz">✅ Тест</a>
+</nav>
+
+<main>
+
+<section id="meta">
+  <h2>Мета заняття</h2>
+  <ul>
+    <li><strong>Навчальна:</strong> удосконалити техніку метання м'яча на дальність та в ціль; закріпити знання про біомеханіку рухів.</li>
+    <li><strong>Оздоровча:</strong> розвиток сили м'язів верхнього плечового пояса, координації, спритності та швидкості реакції.</li>
+    <li><strong>Виховна:</strong> формування дисциплінованості, командного духу, вміння дотримуватися правил змагань.</li>
+    <li><strong>Медична:</strong> поглиблення знань з анатомії м'язів верхньої кінцівки та профілактики травм при метанні.</li>
+  </ul>
+  <div class="game-rules">
+    <strong>⚠️ Техніка безпеки:</strong> перед виконанням — обов'язкова розминка плечового суглоба, ліктьового та променево-зап'ясткового суглобів. Перевірити ділянку метання на відсутність сторонніх осіб.
+  </div>
+</section>
+
+<section id="phases">
+  <h2>📊 Інфографіка: 4 фази метання</h2>
+  <p>Техніка метання м'яча з-за голови складається з чотирьох послідовних фаз. Натисніть на картку, щоб дізнатися більше.</p>
+  <div class="phases">
+    <div class="phase-card" onclick="alert('Підготовча фаза:\n• Прийняти вихідне положення\n• Нога, протилежна метальній руці, попереду\n• М\'яч у піднятій руці\n• Тулуб відведений назад')">
+      <div class="num">1</div>
+      <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="20" r="8" fill="#1e6fd9"/>
+        <line x1="50" y1="28" x2="50" y2="60" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+        <line x1="50" y1="35" x2="35" y2="50" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+        <line x1="50" y1="35" x2="70" y2="20" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="72" cy="18" r="6" fill="#f59e0b"/>
+        <line x1="50" y1="60" x2="40" y2="85" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+        <line x1="50" y1="60" x2="60" y2="85" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+      <h4>Підготовча</h4>
+      <p>Вихідне положення, замах</p>
+    </div>
+    <div class="phase-card" onclick="alert('Фаза замаху:\n• Вага тіла на задню ногу\n• Рука з м\'ячем відведена назад-вгору\n• Тулуб скручений\n• Погляд у напрямку метання')">
+      <div class="num">2</div>
+      <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="20" r="8" fill="#1e6fd9"/>
+        <line x1="50" y1="28" x2="55" y2="60" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+        <line x1="52" y1="35" x2="35" y2="50" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+        <line x1="52" y1="35" x2="75" y2="25" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="78" cy="22" r="6" fill="#f59e0b"/>
+        <line x1="55" y1="60" x2="45" y2="85" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+        <line x1="55" y1="60" x2="65" y2="85" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+      <h4>Замах</h4>
+      <p>Скручування тулуба, підготовка до кидка</p>
+    </div>
+    <div class="phase-card" onclick="alert('Финальне зусилля:\n• Різке випрямлення ніг\n• Поворот тулуба\n• Хлистоподібний рух руки\n• Випуск м\'яча під кутом 35-45°')">
+      <div class="num">3</div>
+      <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="20" r="8" fill="#1e6fd9"/>
+        <line x1="50" y1="28" x2="50" y2="60" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+        <line x1="50" y1="35" x2="30" y2="45" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+        <line x1="50" y1="35" x2="85" y2="15" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="90" cy="12" r="6" fill="#f59e0b"/>
+        <path d="M 90 12 L 98 5" stroke="#ef4444" stroke-width="2" stroke-dasharray="2,2"/>
+        <line x1="50" y1="60" x2="40" y2="85" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+        <line x1="50" y1="60" x2="65" y2="82" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+      <h4>Фінальне зусилля</h4>
+      <p>Випуск м'яча під кутом 35–45°</p>
+    </div>
+    <div class="phase-card" onclick="alert('Завершальна фаза:\n• Перенесення ваги наперед\n• Гальмування інерції\n• Відновлення рівноваги\n• Профілактика травм суглобів')">
+      <div class="num">4</div>
+      <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="22" r="8" fill="#1e6fd9"/>
+        <line x1="50" y1="30" x2="48" y2="62" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+        <line x1="49" y1="37" x2="30" y2="55" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+        <line x1="49" y1="37" x2="68" y2="50" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+        <line x1="48" y1="62" x2="38" y2="85" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+        <line x1="48" y1="62" x2="62" y2="85" stroke="#1e6fd9" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+      <h4>Завершальна</h4>
+      <p>Гальмування, відновлення рівноваги</p>
+    </div>
+  </div>
+</section>
+
+<section id="anatomy">
+  <h2>🫀 Анатомія метання (для медичного коледжу)</h2>
+  <p>Метання м'яча задіює складний м'язовий ланцюг. Знання анатомії допомагає правильно виконувати техніку та уникати травм.</p>
+  <div class="muscles-grid">
+    <div class="body-svg">
+      <svg viewBox="0 0 200 320">
+        <!-- Голова -->
+        <circle cx="100" cy="30" r="22" fill="#fde4cf" stroke="#d4a574" stroke-width="1.5"/>
+        <!-- Шия -->
+        <rect x="92" y="50" width="16" height="14" fill="#fde4cf"/>
+        <!-- Торс -->
+        <path d="M 60 64 L 140 64 L 145 160 L 55 160 Z" fill="#fde4cf" stroke="#d4a574" stroke-width="1.5"/>
+        <!-- Дельтоподібний м'яз -->
+        <ellipse cx="55" cy="78" rx="14" ry="18" fill="#ef4444" opacity="0.75"/>
+        <ellipse cx="145" cy="78" rx="14" ry="18" fill="#ef4444" opacity="0.75"/>
+        <!-- Великі грудні -->
+        <ellipse cx="80" cy="95" rx="18" ry="14" fill="#f59e0b" opacity="0.7"/>
+        <ellipse cx="120" cy="95" rx="18" ry="14" fill="#f59e0b" opacity="0.7"/>
+        <!-- Біцепс -->
+        <ellipse cx="42" cy="120" rx="10" ry="22" fill="#10b981" opacity="0.8"/>
+        <ellipse cx="158" cy="120" rx="10" ry="22" fill="#10b981" opacity="0.8"/>
+        <!-- Передпліччя -->
+        <rect x="34" y="142" width="16" height="50" rx="7" fill="#3b82f6" opacity="0.75"/>
+        <rect x="150" y="142" width="16" height="50" rx="7" fill="#3b82f6" opacity="0.75"/>
+        <!-- Кисті -->
+        <circle cx="42" cy="200" r="9" fill="#fde4cf" stroke="#d4a574"/>
+        <circle cx="158" cy="200" r="9" fill="#fde4cf" stroke="#d4a574"/>
+        <!-- Ноги -->
+        <rect x="62" y="160" width="28" height="130" rx="10" fill="#fde4cf" stroke="#d4a574" stroke-width="1.5"/>
+        <rect x="110" y="160" width="28" height="130" rx="10" fill="#fde4cf" stroke="#d4a574" stroke-width="1.5"/>
+        <!-- Підписи -->
+        <text x="100" y="78" text-anchor="middle" font-size="8" fill="#1e6fd9" font-weight="bold">Дельтоподібний</text>
+        <text x="100" y="100" text-anchor="middle" font-size="8" fill="#b45309" font-weight="bold">Грудні</text>
+        <text x="100" y="125" text-anchor="middle" font-size="8" fill="#065f46" font-weight="bold">Біцепс</text>
+        <text x="100" y="170" text-anchor="middle" font-size="8" fill="#1e40af" font-weight="bold">Передпліччя</text>
+      </svg>
+    </div>
+    <ul class="muscle-list">
+      <li><strong>Дельтоподібний м'яз</strong> — основний стабілізатор плечового суглоба, піднімає руку.</li>
+      <li><strong>Великі грудні м'язи</strong> — забезпечують приведення руки та обертання всередину.</li>
+      <li><strong>Двоголовий м'яз (біцепс)</strong> — згинає руку в ліктьовому суглобі.</li>
+      <li><strong>Триголовий м'яз (трицепс)</strong> — розгинає передпліччя — ключовий у фазі кидка.</li>
+      <li><strong>М'язи передпліччя</strong> — керують рухом кисті, забезпечують точність випуску м'яча.</li>
+      <li><strong>Косі м'язи живота</strong> — беруть участь у скручуванні тулуба.</li>
+      <li><strong>М'язи нижніх кінцівок</strong> — створюють опору та передають імпульс.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="simulator">
+  <h2>🎮 Інтерактивний симулятор метання</h2>
+  <p>Налаштуйте кут та силу кидка, щоб досягти максимальної дальності. Оптимальний кут — <strong>45°</strong>.</p>
+  <div class="simulator">
+    <div class="sim-canvas" id="canvas">
+      <div class="ball" id="ball"></div>
+      <div style="position:absolute; bottom:30%; right:10%; font-size:1.5rem;">🎯</div>
+    </div>
+    <div class="controls">
+      <div class="control">
+        <label>Кут кидка: <span class="value" id="angleVal">45°</span></label>
+        <input type="range" id="angle" min="10" max="80" value="45">
+      </div>
+      <div class="control">
+        <label>Сила кидка: <span class="value" id="forceVal">70%</span></label>
+        <input type="range" id="force" min="20" max="100" value="70">
+      </div>
+    </div>
+    <button class="throw-btn" onclick="throwBall()">🏐 Метнути м'яч!</button>
+    <div class="result" id="result"></div>
+  </div>
+</section>
+
+<section id="game">
+  <h2>🏆 Спортивна гра «Точний стрілець»</h2>
+  <p>Гра проводиться у вигляді змагань між командами. Мета — набрати найбільшу кількість балів за точність та техніку.</p>
+  <div class="game-rules">
+    <h3>📋 Правила гри</h3>
+    <ul>
+      <li><strong>Команда:</strong> 4–6 гравців.</li>
+      <li><strong>Завдання 1:</strong> метання на дальність (3 спроби, зараховується краща).</li>
+      <li><strong>Завдання 2:</strong> метання в ціль (мішень діаметром 2 м — 5 балів, внутрішнє коло 0,5 м — 10 балів).</li>
+      <li><strong>Завдання 3:</strong> естафета — передача м'яча з бігу з наступним метанням.</li>
+      <li><strong>Оцінюється:</strong> техніка (до 5 балів), дальність, точність, командна робота.</li>
+    </ul>
+  </div>
+  <h3>🎯 Вікторина під час гри</h3>
+  <p>Перевірте свої знання — відповідайте на запитання, щоб отримати бонусні бали команді!</p>
+  <div class="quiz" id="quiz"></div>
+  <div class="score-box">Ваш рахунок: <span id="score">0</span> / <span id="total">0</span></div>
+</section>
+
+<section id="homework">
+  <h2>📝 Домашнє завдання</h2>
+  <div class="homework">
+    <p style="margin-bottom:14px;">Виконайте всі пункти та відмітьте виконане. Прогрес зберігається на сторінці.</p>
+    <div class="task"><input type="checkbox" onchange="toggleTask(this)"><div><strong>Теорія:</strong> повторити 4 фази метання м'яча з конспекту.</div></div>
+    <div class="task"><input type="checkbox" onchange="toggleTask(this)"><div><strong>Анатомія:</strong> намалювати схему м'язів верхнього плечового пояса, що задіяні при метанні (дельтоподібний, грудні, біцепс, трицепс).</div></div>
+    <div class="task"><input type="checkbox" onchange="toggleTask(this)"><div><strong>Практика:</strong> виконати 20 кидків м'яча вдома (у безпечному місці), фіксуючи правильний кут 45°.</div></div>
+    <div class="task"><input type="checkbox" onchange="toggleTask(this)"><div><strong>Медичний аспект:</strong> підготувати коротке повідомлення (1 стор.) про профілактику травм плечового суглоба у спортсменів-метальників.</div></div>
+    <div class="task"><input type="checkbox" onchange="toggleTask(this)"><div><strong>Інфографіка:</strong> створити власну інфографіку «Помилки при метанні м'яча» (формат А4, рукописна або цифрова).</div></div>
+    <div class="task"><input type="checkbox" onchange="toggleTask(this)"><div><strong>Відео-аналіз:</strong> переглянути відео техніки метання олімпійських чемпіонів, виписати 3 ключові елементи.</div></div>
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+    <p style="margin-top:10px; color:var(--muted); font-size:0.9rem;">Прогрес: <span id="progressText">0</span>%</p>
+  </div>
+</section>
+
+<section id="quiz">
+  <h2>✅ Підсумковий тест</h2>
+  <div class="quiz" id="finalQuiz"></div>
+  <div class="score-box">Результат: <span id="finalScore">0</span> / <span id="finalTotal">0</span></div>
+</section>
+
+</main>
+
+<footer>
+  © 2026 Медичний коледж • Кафедра фізичного виховання<br>
+  Інтерактивний навчальний матеріал • Світла тема
+</footer>
+
+<script>
+  // Симулятор
+  const angleSlider = document.getElementById('angle');
+  const forceSlider = document.getElementById('force');
+  const angleVal = document.getElementById('angleVal');
+  const forceVal = document.getElementById('forceVal');
+  const ball = document.getElementById('ball');
+  const canvas = document.getElementById('canvas');
+  const result = document.getElementById('result');
+
+  angleSlider.oninput = () => angleVal.textContent = angleSlider.value + '°';
+  forceSlider.oninput = () => forceVal.textContent = forceSlider.value + '%';
+
+  function throwBall() {
+    const angle = parseFloat(angleSlider.value);
+    const force = parseFloat(forceSlider.value);
+    const rad = angle * Math.PI / 180;
+    const canvasW = canvas.offsetWidth;
+    const canvasH = canvas.offsetHeight;
+    const groundY = canvasH * 0.7;
+
+    ball.style.transition = 'none';
+    ball.style.left = '10%';
+    ball.style.bottom = '30%';
+    void ball.offsetWidth;
+    ball.style.transition = 'all 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+
+    const distance = (force / 100) * Math.sin(2 * rad) * canvasW * 0.7;
+    const maxHeight = (force / 100) * Math.sin(rad) * Math.sin(rad) * canvasH * 0.8;
+
+    let step = 0;
+    const totalSteps = 60;
+    const startX = canvasW * 0.1;
+    const endX = startX + distance;
+
+    const interval = setInterval(() => {
+      step++;
+      const t = step / totalSteps;
+      const x = startX + (endX - startX) * t;
+      const y = groundY - 4 * maxHeight * t * (1 - t);
+      ball.style.left = (x - 11) + 'px';
+      ball.style.bottom = (canvasH - y - 11) + 'px';
+      if (step >= totalSteps) {
+        clearInterval(interval);
+        const score = Math.round(force * Math.sin(2 * rad) * 10) / 10;
+        result.innerHTML = `📏 <strong>Дальність:</strong> ${(distance / canvasW * 50).toFixed(1)} м • <strong>Оцінка техніки:</strong> ${score} / 100`;
+        if (angle >= 40 && angle <= 50 && force >= 70) {
+          result.innerHTML += '<br>🏆 <strong style="color:#065f46">Чудово! Оптимальний кут і сила!</strong>';
+        } else if (angle < 40) {
+          result.innerHTML += '<br>💡 <em>Спробуйте збільшити кут до 45° для кращої дальності.</em>';
+        } else if (angle > 50) {
+          result.innerHTML += '<br>💡 <em>Кут завеликий — м\'яч летить високо, але не далеко.</em>';
+        }
+        result.classList.add('show');
+      }
+    }, 25);
+  }
+
+  // Вікторина гри
+  const gameQuiz = [
+    { q: 'Який кут метання вважається оптимальним для максимальної дальності?', o: ['30°', '45°', '60°', '90°'], a: 1 },
+    { q: 'Яка фаза метання першою за рахунком?', o: ['Фінальне зусилля', 'Замах', 'Підготовча', 'Завершальна'], a: 2 },
+    { q: 'Який м\'яз є основним при розгинанні руки під час кидка?', o: ['Біцепс', 'Трицепс', 'Дельтоподібний', 'Грудний'], a: 1 },
+    { q: 'Що НЕ є частиною техніки безпеки?', o: ['Розминка', 'Перевірка ділянки', 'Метання у натовп', 'Контроль техніки'], a: 2 }
+  ];
+
+  const finalQuizData = [
+    { q: 'Скільки фаз у техніці метання м\'яча?', o: ['2', '3', '4', '5'], a: 2 },
+    { q: 'Яка м\'язова група відповідає за скручування тулуба?', o: ['Прес', 'Косі м\'язи живота', 'Сідничні', 'Литкові'], a: 1 },
+    { q: 'Що відбувається у завершальній фазі?', o: ['Замах', 'Випуск м\'яча', 'Гальмування та відновлення рівноваги', 'Підготовка'], a: 2 },
+    { q: 'Який суглоб найбільше навантажується при метанні?', o: ['Колінний', 'Плечовий', 'Гомілковостопний', 'Тазостегновий'], a: 1 },
+    { q: 'Що важливо для профілактики травм?', o: ['Ігнорувати розминку', 'Правильна техніка та розминка', 'Метати максимально сильно', 'Метати однією рукою'], a: 1 }
+  ];
+
+  let gameScore = 0;
+  let finalScore = 0;
+
+  function renderQuiz(data, container, scoreEl, totalEl) {
+    const containerEl = document.getElementById(container);
+    data.forEach((item, idx) => {
+      const qDiv = document.createElement('div');
+      qDiv.className = 'question';
+      qDiv.innerHTML = `<p>${idx + 1}. ${item.q}</p><div class="options"></div>`;
+      const opts = qDiv.querySelector('.options');
+      item.o.forEach((opt, i) => {
+        const oDiv = document.createElement('div');
+        oDiv.className = 'option';
+        oDiv.textContent = opt;
+        oDiv.onclick = () => {
+          if (qDiv.dataset.answered) return;
+          qDiv.dataset.answered = '1';
+          if (i === item.a) {
+            oDiv.classList.add('correct');
+            window[scoreEl]++;
+          } else {
+            oDiv.classList.add('wrong');
+            opts.children[item.a].classList.add('correct');
+          }
+          document.getElementById(totalEl).textContent = window[scoreEl];
+        };
+        opts.appendChild(oDiv);
+      });
+      containerEl.appendChild(qDiv);
+    });
+    document.getElementById(totalEl).textContent = data.length;
+  }
+
+  renderQuiz(gameQuiz, 'quiz', 'gameScore', 'total');
+  renderQuiz(finalQuizData, 'finalQuiz', 'finalScore', 'finalTotal');
+
+  // Домашнє завдання
+  function toggleTask(cb) {
+    cb.parentElement.classList.toggle('done', cb.checked);
+    updateProgress();
+  }
+  function updateProgress() {
+    const all = document.querySelectorAll('.task input');
+    const done = document.querySelectorAll('.task input:checked');
+    const pct = Math.round((done.length / all.length) * 100);
+    document.getElementById('progress').style.width = pct + '%';
+    document.getElementById('progressText').textContent = pct;
+  }
+</script>
+
+</body>
+</html>
